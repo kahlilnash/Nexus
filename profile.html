@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .my-card .post-avatar {
+            width: 70px;
+            /* Adjust the size as needed */
+            height: 70px;
+            /* Adjust the size as needed */
+        }
+
+        .separator-line {
+            border: none;
+            /* Removes the default ugly browser border */
+            height: 1px;
+            /* Defines the thickness of the line */
+            background-color: #e0e0e0;
+            /* Changes the line color (light gray) */
+            margin: 20px 0;
+            /* Adds 20px of space above and below the line */
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 1. NAVIGATION BAR -->
+    <nav class="navbar">
+        <a href="index.html" class="logo">Nexus</a>
+        <div class="search-bar">
+            <input type="text" placeholder="Search">
+        </div>
+    </nav>
+
+    <!-- 2. MAIN LAYOUT GRID -->
+    <main class="app-container">
+
+        <!-- Site Navigation -->
+        <div class="site-nav">
+            <ul>
+                <li><a href="index.html"><img src="images/home_emoji.png" width="20px" height="20px"></a></li>
+                <li><a href="messages.html"><img src="images/messages_emoji.png" width="20px" height="20px"></a></li>
+                <li><a href="discover.html"><img src="images/discover_emoji.png" width="20px" height="20px"></a></li>
+                <li><a href="settings.html"><img src="images/settings_emoji.png" width="20px" height="20px"></a></li>
+            </ul>
+        </div>
+
+        <div class="content-container">
+            <div class="my-card">
+                <div class="nav-profile">
+                    <!-- Placeholder for user avatar -->
+                    <div class="post-avatar"></div>
+                </div>
+                <br>
+                <h2 class="profile-name">John Doe</h2>
+
+                <!-- Bio or Job Title -->
+                <p class="profile-bio">Web Developer & Designer</p>
+                <hr class="separator-line">
+                <strong><span id="follower-count">1000</span> Followers</strong> | <strong><span
+                        id="following-count">1000</span> Following</strong>
+            </div>
+        </div>
+        <div class="content-container">
+        </div>
+    </main>
+
+</body>
+
+</html>
