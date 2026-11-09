@@ -1,44 +1,44 @@
 <?php 
 session_start();
+require 'database.php'; // 1. Added database link to load real users
 
-// Simulated database using hardcoded arrays
-$mock_users = [
+$errors = []; // 3. Standardized variable name to collect error items
 
-    "admin" => password_hash("password123", PASSWORD_DEFAULT),
-    "student" => password_hash("nexus2026", PASSWORD_DEFAULT),
-    "webdev_user" => password_hash("securepass", PASSWORD_DEFAULT)
-];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = trim($_POST['uname'] ?? '');
+    $password = $_POST['psw'] ?? '';
 
-$error_message = "";
-
-if($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = trim($_POST['uname']);
-    $password = $_POST['psw'];
-
-    if(empty($username) || empty($password)) {
-        $error_message = "Please fill in both fields.";
+    if (empty($username) || empty($password)) {
+        $errors[] = "Please fill in both fields.";
     } else {
-        // Check if the username exists in our array and the password matches
-        if(array_key_exists($username, $mock_users)) {
+        try {
+            // Fetch the user data from your real database schema securely
+            $sql = "SELECT uname, psw FROM users WHERE uname = :uname LIMIT 1";
+            $stmt = $dbh->prepare($sql);
+            $stmt->bindValue(':uname', $username);
+            $stmt->execute();
+            $user = $stmt->fetch();
 
-            // Grab the generated hash for that user
-            $stored_hash = $mock_users[$username];
-
-            // User password_verify to check if the password matches the hash
-            if(password_verify($password, $stored_hash)) {
-                $_SESSION['logged_in_user'] = $username;
-            // Redirect them to the protected page
-            header("Location: index.php");
-            exit;
-        } else {
-            $error_message = "Invalid username or password.";
-        } 
-        } else {
-            $error_message = "Invalid username or password.";
+            // If user exists, check their password against the database hash
+            if ($user) {
+                if (password_verify($password, $user['psw'])) {
+                    $_SESSION['logged_in_user'] = $user['uname'];
+                    
+                    // Redirect them to the protected home page
+                    header("Location: index.php");
+                    exit();
+                } else {
+                    // Generic message prevents attacker enumeration
+                    $errors[] = "Invalid username or password.";
+                }
+            } else {
+                $errors[] = "Invalid username or password.";
+            }
+        } catch (PDOException $e) {
+            $errors[] = "Authentication failure occurred. Please try again.";
         }
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -52,21 +52,38 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
-    <a class="logo">Nexus</a>
-    <form class="login-container" method="post">
+    <a class="logo" href="login.php">Nexus</a>
+    <form class="login-container" method="post">    
         <div class="container">
-        <?php if (!empty($error_message)): ?>
-            <div style="color: red; margin-bottom: 15px;">
-                <strong>Error:</strong> <?php echo $error_message; ?>
-            </div>
-        <?php endif; ?>
+            <?php if (!empty($_SESSION['success_message'])): ?>
+                <div style="color: green; margin-bottom: 15px; font-weight: bold;">
+                    <?php 
+                    echo htmlspecialchars($_SESSION['success_message']); 
+                    // Clear it so it disappears if they refresh the login page
+                    unset($_SESSION['success_message']); 
+                    ?>
+                </div>
+            <?php endif; ?>
+                <!-- 3. Fixed Error Block Layout Loop to match backend array -->
+            <?php if (!empty($errors)): ?>
+                <div style="color: red; margin-bottom: 15px;">
+                    <ul>
+                        <?php foreach ($errors as $error): ?>
+                            <li><?php echo htmlspecialchars($error); ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
+
             <div class="login-label">
                 <strong>Log into Nexus</strong>
             </div>
+            
             <input type="text" placeholder="Username" name="uname" pattern="^\S+$"
                 title="Spaces are not allowed in the username." required>
             <input type="password" placeholder="Password" name="psw" required>
             <button type="submit">Login</button>
+            
             <span class="newaccount"><a href="register.php">Create a new account</a></span>
             <label>
                 <input type="checkbox" checked="checked" name="remember"> Remember me

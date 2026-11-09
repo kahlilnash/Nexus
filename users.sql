@@ -1,15 +1,20 @@
+CREATE DATABASE IF NOT EXISTS users;
+USE users;
+
+DROP TABLE IF EXISTS users;
+
 CREATE TABLE users (
   user_id   INT AUTO_INCREMENT PRIMARY KEY,
-  full_name     VARCHAR(50)  NOT NULL,
-  username      VARCHAR(50)  NOT NULL UNIQUE,
+  name     VARCHAR(50)  NOT NULL,
+  uname      VARCHAR(50)  NOT NULL UNIQUE,
   email         VARCHAR(100) NOT NULL UNIQUE,
-  password_hash VARCHAR(255) NOT NULL,
-  date_of_birth DATE NOT NULL,
+  psw VARCHAR(255) NOT NULL,
+  birthday DATE NOT NULL,
     CONSTRAINT chk_dob_limits CHECK (
-        date_of_birth >= '1900-01-01' 
-        AND date_of_birth <= CURRENT_DATE - INTERVAL '13 years'
-    )
+        birthday >= '1900-01-01' 
+        AND birthday <= CURRENT_DATE - INTERVAL 13 YEAR
+    ),
   is_active     BOOLEAN DEFAULT TRUE,
   created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-)
+);
