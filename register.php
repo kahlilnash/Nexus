@@ -75,7 +75,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bindValue(':email', $email);
             $stmt->bindValue(':psw', $hashedPassword);
             $stmt->bindValue(':birthday', $dob);
-
             $stmt->execute();
 
             $_SESSION['registered_data'] = [
@@ -113,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <a class="logo" href="login.php">Nexus</a>
     <br>
-    <form action="" class="login-container" method="POST">
+    <form action=" " class="login-container" method="POST">
         <div class="container">
             <div class="login-label">
                 <strong>Create a new account</strong>
@@ -139,8 +138,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <label for="email"><strong>Email</strong></label>
             <!-- FIXED: Added missing 'echo' keyword inside value attribute -->
-            <input type="email" placeholder="Email" name="email" pattern="^\S+$"
-                title="Spaces are not allowed in the email." value="<?php echo htmlspecialchars($email); ?>" required>
+            <input type="email" placeholder="Email" name="email"
+                value="<?php echo htmlspecialchars($email); ?>" required>
 
             <label for="password"><strong>Password</strong></label>
             <input type="password" placeholder="Password" name="psw" pattern="^\S+$"
