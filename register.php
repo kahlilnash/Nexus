@@ -112,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <a class="logo" href="login.php">Nexus</a>
     <br>
-    <form action=" " class="login-container" method="POST">
+    <form action="" class="login-container" method="POST">
         <div class="container">
             <div class="login-label">
                 <strong>Create a new account</strong>
