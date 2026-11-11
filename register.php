@@ -48,16 +48,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Enter your date of birth.";
         $okay = false;
     } else {
-        $birthdayDate = new DateTime($dob);
-        $today = new DateTime();
-        $ageDifference = $today->diff($birthdayDate);
+        try {
+            $birthdayDate = new DateTime($dob);
+            $today = new DateTime();
+            $ageDifference = $today->diff($birthdayDate);
 
-        if ($ageDifference->y < 13) {
-            $errors[] = "You must be at least 13 years old to create an account.";
-            $okay = false;
+            if ($birthdayDate > $today || $ageDifference->y < 13) {
+                $errors[] = "You must be at least 13 years old to create an account.";
+                $okay = false;
         }
+    } catch (Exception $e) {
+        $errors[] = "Invalid date format.";
+        $okay = false;
     }
-
+}
     if ($okay) {
         try { 
             $sql = 'INSERT INTO users (

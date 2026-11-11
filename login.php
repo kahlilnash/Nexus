@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             <span class="newaccount"><a href="register.php">Create a new account</a></span>
             <label>
-                <input type="checkbox" checked="checked" name="remember"> Remember me
+                <input type="checkbox" checked="checked" name="remember" value="1"> Remember me
             </label>
             <span class="psw"><a href="forgotpassword.html">Forgot password?</a></span>
         </div>
